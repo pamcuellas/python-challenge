@@ -22,9 +22,11 @@ csvfile = os.path.join("..","datasource","budget_data.csv")
 
 # Open file
 with open(csvfile, newline ="") as csvfile:
+    # Read file
     csvreader = csv.reader (csvfile, delimiter=",")
     # Skip the header
     csv_header = next(csvreader) 
+    # Loop through all rows
     for row in csvreader: 
         months.append(row[0])
         curr_value = float(row[1])
@@ -40,6 +42,7 @@ with open(csvfile, newline ="") as csvfile:
             greatest_decrease_month = row[0]
         # Store the month value for next iteration.
         prev_value = curr_value
+        # Store the value change for the current month
         diffs.append(curr_dif_value)
 
 # Remove the first value because there is no variation for the first month.
@@ -47,7 +50,7 @@ diffs.pop(0)
 
 ############################## print results on terminal ################################
 print("-------------------------------------------------------")
-print("Results Financial Analysis:")
+print("Financial Analysis Results:")
 print("-------------------------------------------------------")
 
 # The total number of months included in the dataset
@@ -66,50 +69,27 @@ print("Average Change: ${:10,.2f}".format(average_change))
 print("Greatest Increase in Profits: {} (${:13,.2f})".format(greatest_increase_month, greatest_increase_value))
 
 # The greatest decrease in losses (monthsnd amount) over the entire period
-print("Greatest Decrease in losses:  {} (${:0,.2f})".format(greatest_decrease_month, greatest_decrease_value))
+print("Greatest Decrease in Losses:  {} (${:0,.2f})".format(greatest_decrease_month, greatest_decrease_value))
 print("-------------------------------------------------------")
 
+############################## Export CSV File ################################
 
-# As an.a example, your analysis should look similar to the one below:
+output_file = os.path.join("..","datasource","financial_analysis_results.csv") 
 
+dic = {
+    "Total Months":     total_months,
+    "Total Value":      total_value,
+    "Average Change":   average_change,
+    "Month Greatest Increase in Profits": greatest_increase_month,
+    "Value Greatest Increase in Profits": greatest_increase_value,
+    "Month Greatest Increase in Losses": greatest_decrease_month,
+    "Value Greatest Increase in Losses": greatest_decrease_value
+}
 
-#   Financial Analysis
-#   ----------------------------
-#   Total Months: 86
-#   Total: $38382578
-#   Average  Change: $-2315.12
-#   Greatest Increase in Profits: Feb-2012 ($1,926,159)
-#   Greatest Decrease in Profits: Sep-2013 ($-2,196,167)
+header = ["Description", "Value"]
+roster = zip (dic.keys(),dic.values())
 
-# In addition, your final script should both print the analysis to the terminal and export a text file with the results.
-
-
-
-# print()
-# print(greatest_increase_month)
-# print(greatest_decrease_value)
-# print(greatest_decrease_month)
-# print(greatest_decrease_month)
-# print (diffs)
-
-
-
-# .aloss.aes = [i for i in values if i < 0]
-# profit = [i for i in values if i >= 0]
-# print(losses)
-# print(profit)
-
-# print("--------------------------")
-# print(sum(losses)/len(losses))
-# print(sum(profit)/len(profit))
-# print("--------------------------")
-# print(sum(losses)/len(values))
-# print(sum(profit)/len(values))
-# print("--------------------------")
-# print(sum(losses)/len(profit))
-# print(sum(profit)/len(losses))
-# print("--------------------------")
-
-# print( sum(profit)/sum(losses) )
-
-    # print("Average Change: {:17,.2f}".format(average))
+with open(output_file,"w", newline ="") as datafile:
+    writer = csv.writer(datafile)
+    writer.writerow(header)
+    writer.writerows(roster)
