@@ -7,7 +7,7 @@ import csv
 months  = []
 # List for month values
 values  = []
-# List for value change between consecutive months 
+# List for the value change between consecutive months 
 diffs   = []
 greatest_increase_month = ""
 greatest_decrease_month = ""
@@ -48,7 +48,7 @@ with open(csvfile, newline ="") as csvfile:
 # Remove the first value because there is no variation for the first month.
 diffs.pop(0)
 
-############################## print results on terminal ################################
+############################## printing results on terminal ################################
 print("-------------------------------------------------------")
 print("Financial Analysis Results:")
 print("-------------------------------------------------------")
@@ -72,24 +72,28 @@ print("Greatest Increase in Profits: {} (${:13,.2f})".format(greatest_increase_m
 print("Greatest Decrease in Losses:  {} (${:0,.2f})".format(greatest_decrease_month, greatest_decrease_value))
 print("-------------------------------------------------------")
 
-############################## Export CSV File ################################
 
+############################## Exporting results to CSV File ################################
+# Map the output file.
 output_file = os.path.join("..","datasource","financial_analysis_results.csv") 
-
+# Dictionary with description(keys) and values.
 dic = {
-    "Total Months":     total_months,
-    "Total Value":      total_value,
-    "Average Change":   average_change,
-    "Month Greatest Increase in Profits": greatest_increase_month,
-    "Value Greatest Increase in Profits": greatest_increase_value,
-    "Month Greatest Increase in Losses": greatest_decrease_month,
-    "Value Greatest Increase in Losses": greatest_decrease_value
+    "Total Months": total_months,
+    "Total Value": total_value,
+    "Average Change": average_change,
+    "Month - Greatest Increase in Profits": greatest_increase_month,
+    "Value - Greatest Increase in Profits": greatest_increase_value,
+    "Month - Greatest Increase in Losses": greatest_decrease_month,
+    "Value - Greatest Increase in Losses": greatest_decrease_value
 }
-
+# Header for the CSV file
 header = ["Description", "Value"]
-roster = zip (dic.keys(),dic.values())
-
+# Use zip to create the columns Description and Values.
+content = zip (dic.keys(),dic.values())
+# Open the output file
 with open(output_file,"w", newline ="") as datafile:
     writer = csv.writer(datafile)
+    # Write the header
     writer.writerow(header)
-    writer.writerows(roster)
+    # Write the content
+    writer.writerows(content)
