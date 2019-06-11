@@ -3,15 +3,13 @@ import os
 import csv
 
 # Declare and initialize variables
-# List for counties
-counties_list  = []
 # List for all votes
-votes_list  = []
+votes  = []
 # List for distinct candidates
-candidates_list  = []
+candidates  = []
 
 # Map csv file
-csvfile = os.path.join("..","datasource","election_data.csv") 
+csvfile = os.path.join("..","datasource","election_data_tst.csv") 
 
 # Open file
 with open(csvfile, newline ="") as csvfile:
@@ -21,26 +19,49 @@ with open(csvfile, newline ="") as csvfile:
     csv_header = next(csvreader) 
     # Loop through all rows
     for row in csvreader: 
-        counties_list.append(row[1])
-        votes_list.append(row[2])
+        votes.append(row[2])
         
       
 # The dataset is composed of three columns: Voter ID, County, and Candidate. Your task is to create a 
 # Python script that analyzes the votes and calculates each of the following:
 
+############################## Printing Election Results on terminal ################################
+print("-------------------------------------------------------")
+print("{}".format("ELECTION RESULTS:"))
+print("-------------------------------------------------------")
 
 # The total number of votes cast
-total_votes = len(votes_list)
-# A complete list of candidates who received votes
-candidates_list = list(set(votes_list))
- 
-# Create dictionary to store candidate and respective percentage and number of votes.
-dictionary = [ {candidate: [votes_list.count(candidate), votes_list.count(candidate)/total_votes * 100]} for candidate in candidates_list ]
+total_votes = len(votes)
+print("Total Votes: {}".format(total_votes))
+print("-------------------------------------------------------")
 
-print(my_list)
-# The total number of votes each candidate won
+# Get a list of distinct candidates
+candidates = list(set(votes))
+
+# Create a list of candidate dicionary to store his/her respective percentage and number of votes.
+ldict = [ {name: {"percent": votes.count(name)/total_votes * 100, "votes": votes.count(name)}} for name in candidates ]
+# Print results for each candidate.
+# [ print("{}: {:0.3f}% ({:0,.0f}) ".format(str(candidates[i]), 
+#                               ldict[i][candidates[i]]["percent"], 
+#                               ldict[i][candidates[i]]["votes"]
+#                               )
+#         ) for i in range(len(candidates)) 
+# ]
+
+
+
+[ print("{}: {:0.3f}% ({:0,.0f}) ".format(str(candidates[i]), 
+                              ldict[i][candidates[i]]["percent"], 
+                              ldict[i][candidates[i]]["votes"]
+                              )
+        ) for i in range(len(candidates)) 
+]
+inverse = [(value, key) for key, value in ldict.items()]
+print (max(inverse)[1])
 
 # The winner of the election based on popular vote.
+
+print("-------------------------------------------------------")
 
 
 # As an example, your analysis should look similar to the one below:
