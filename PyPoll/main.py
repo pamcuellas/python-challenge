@@ -1,15 +1,17 @@
 # Import dependencies
 import os 
 import csv
+import operator
 
 # Declare and initialize variables
 # List for all votes
 votes  = []
-# List for distinct candidates
+# Deduplicated list of candidates
 candidates  = []
-
+# String to store the winner
+winner = ""
 # Map csv file
-csvfile = os.path.join("..","datasource","election_data_tst.csv") 
+csvfile = os.path.join("..","datasource","election_data.csv") 
 
 # Open file
 with open(csvfile, newline ="") as csvfile:
@@ -20,60 +22,53 @@ with open(csvfile, newline ="") as csvfile:
     # Loop through all rows
     for row in csvreader: 
         votes.append(row[2])
-        
       
-# The dataset is composed of three columns: Voter ID, County, and Candidate. Your task is to create a 
-# Python script that analyzes the votes and calculates each of the following:
-
-############################## Printing Election Results on terminal ################################
-print("-------------------------------------------------------")
-print("{}".format("ELECTION RESULTS:"))
-print("-------------------------------------------------------")
-
-# The total number of votes cast
+############################## Compute Results ################################
+# The total number of votes
 total_votes = len(votes)
-print("Total Votes: {}".format(total_votes))
-print("-------------------------------------------------------")
-
-# Get a list of distinct candidates
+# Get a deduplicated list of candidates.
 candidates = list(set(votes))
+# Sort the candidates in descending order by votes number
+d = { name: votes.count(name) for name in candidates }
+sorted  = dict( sorted(d.items(), key=operator.itemgetter(1),reverse=True))
+# Get the winner name
+winner = list(sorted)[0]
 
-# Create a list of candidate dicionary to store his/her respective percentage and number of votes.
-ldict = [ {name: {"percent": votes.count(name)/total_votes * 100, "votes": votes.count(name)}} for name in candidates ]
-# Print results for each candidate.
-# [ print("{}: {:0.3f}% ({:0,.0f}) ".format(str(candidates[i]), 
-#                               ldict[i][candidates[i]]["percent"], 
-#                               ldict[i][candidates[i]]["votes"]
-#                               )
-#         ) for i in range(len(candidates)) 
-# ]
+############################## Print Election Results on terminal ################################
+print("--------------------")
+print("ELECTION RESULTS")
+print("--------------------")
 
+print(f"Total Votes: {total_votes}")
+print("--------------------")
 
+# Print results for each candidate in ranking order.
+[print("{}: {:0.3f}% ({:0,.0f}) ".format( name , sorted[name]/total_votes*100, sorted[name])) for name in sorted.keys()]
+print("--------------------")
 
-[ print("{}: {:0.3f}% ({:0,.0f}) ".format(str(candidates[i]), 
-                              ldict[i][candidates[i]]["percent"], 
-                              ldict[i][candidates[i]]["votes"]
-                              )
-        ) for i in range(len(candidates)) 
-]
-inverse = [(value, key) for key, value in ldict.items()]
-print (max(inverse)[1])
+# Print the winner name.
+print(f"Winner: {winner}")
+print("--------------------")
 
-# The winner of the election based on popular vote.
+############################## Exporting results to CSV File ################################
+# Map the output file.
+output_file = os.path.join("..","datasource","election_results.csv") 
 
-print("-------------------------------------------------------")
+# Dictionary with description(keys) and values.
+dic = {"Total Votes": total_votes}
+for name in sorted.keys():
+    dic[name] = "{:0.3f}% ({:0,.0f}) ".format(sorted[name]/total_votes*100, sorted[name])
+dic["Winner"] = winner
 
+# Use zip to create the columns Description and Values.
+content = zip (dic.keys(),dic.values())
+# Header for the CSV file
+header = ["DESCRIPTION", "VALUE"]
+# Open the output file
+with open(output_file,"w", newline ="") as datafile:
+    writer = csv.writer(datafile)
+    # Write the header
+    writer.writerow(header)
+    # Write the content
+    writer.writerows(content)
 
-# As an example, your analysis should look similar to the one below:
-
-
-#   Election Results
-#   -------------------------
-#   Total Votes: 3521001
-#   -------------------------
-#   Khan: 63.000% (2218231)
-#   Correy: 20.000% (704200)
-#   Li: 14.000% (492940)
-#   O'Tooley: 3.000% (105630)
-#   -------------------------
-#   Winner: Khan

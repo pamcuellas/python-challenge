@@ -87,7 +87,7 @@ dic = {
     "Value - Greatest Increase in Losses": greatest_decrease_value
 }
 # Header for the CSV file
-header = ["Description", "Value"]
+header = ["DESCRIPTION", "VALUE"]
 # Use zip to create the columns Description and Values.
 content = zip (dic.keys(),dic.values())
 # Open the output file
