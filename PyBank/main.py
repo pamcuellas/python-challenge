@@ -48,32 +48,31 @@ with open(csvfile, newline ="") as csvfile:
 # Remove the first value because there is no variation for the first month.
 diffs.pop(0)
 
-############################## printing results on terminal ################################
+############################## Print the results on terminal ################################
 print("-------------------------------------------------------")
 print("Financial Analysis Results:")
 print("-------------------------------------------------------")
 
-# The total number of months included in the dataset
+# Get the total number of months
 total_months = len(months)
 print("Total Months: {}".format(total_months))
 
-# The net total amount of "Profit/Losses" over the entire period
+# Get the net total amount of "Profit/Losses" over the entire period
 total_value = sum(values)
 print("Total Value: ${:13,.2f}".format(total_value))
 
-# The average of the changes in "Profit/Losses" over the entire period
+# Get the average of the changes in "Profit/Losses" over the entire period
 average_change = sum(diffs)/len(diffs)
 print("Average Change: ${:10,.2f}".format(average_change))
 
-# The greatest increase in profits (monthsnd amount) over the entire period
+# Get the greatest increase in profits 
 print("Greatest Increase in Profits: {} (${:13,.2f})".format(greatest_increase_month, greatest_increase_value))
 
-# The greatest decrease in losses (monthsnd amount) over the entire period
+# Get the greatest decrease in losses 
 print("Greatest Decrease in Losses:  {} (${:0,.2f})".format(greatest_decrease_month, greatest_decrease_value))
 print("-------------------------------------------------------")
 
-
-############################## Exporting results to CSV File ################################
+############################## Export the results to CSV File ################################
 # Map the output file.
 output_file = os.path.join("..","datasource","financial_analysis_results.csv") 
 # Dictionary with description(keys) and values.

@@ -30,21 +30,21 @@ total_votes = len(votes)
 candidates = list(set(votes))
 # Sort the candidates in descending order by votes number
 d = { name: votes.count(name) for name in candidates }
-sorted  = dict( sorted(d.items(), key=operator.itemgetter(1),reverse=True))
+sorted  = dict( sorted(d.items(), key=operator.itemgetter(1), reverse=True))
 # Get the winner name
 winner = list(sorted)[0]
 
 ############################## Print Election Results on terminal ################################
 print("--------------------")
 print("ELECTION RESULTS")
-print("--------------------")
+print("-----------------------------")
 
-print(f"Total Votes: {total_votes}")
-print("--------------------")
+print("Total Votes: {:16,.0f}".format(total_votes))
+print("-----------------------------")
 
 # Print results for each candidate in ranking order.
-[print("{}: {:0.3f}% ({:0,.0f}) ".format( name , sorted[name]/total_votes*100, sorted[name])) for name in sorted.keys()]
-print("--------------------")
+[print("{} {:6.3f}% ({:9,.0f}) ".format( (name +":").ljust(9) , sorted[name]/total_votes*100, sorted[name])) for name in sorted.keys()]
+print("-----------------------------")
 
 # Print the winner name.
 print(f"Winner: {winner}")
